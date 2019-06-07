@@ -1,0 +1,3 @@
+rootProject.name = 'Park17Cafe'
+
+include ':app'
