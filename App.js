@@ -14,6 +14,8 @@ import dbconfig from './firebaseconn';
 
 import { Container, Item, Form, Input, Button, Label } from "native-base";
 
+import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
+
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -21,84 +23,82 @@ import { Container, Item, Form, Input, Button, Label } from "native-base";
 //     'Shake or press menu button for dev menu',
 // });
 
-
-
-export default class App extends React.Component {
+// export default class App extends React.Component {
   
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-      password: ""
-    };
-  }
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       email: "",
+//       password: ""
+//     };
+//   }
 
-  componentWillMount()  {
-    var config = dbconfig;
-    firebase.initializeApp(config); 
-  }
+//   componentWillMount()  {
+//     var config = dbconfig;
+//     firebase.initializeApp(config); 
+//   }
   
-  SignUp = (email, password) => {
-    try {
-      firebase.auth().createUserWithEmailAndPassword(email, password);
-    } catch (error) {
-      console.log(error.toString(error));
-    }
-  };
+//   SignUp = (email, password) => {
+//     try {
+//       firebase.auth().createUserWithEmailAndPassword(email, password);
+//     } catch (error) {
+//       console.log(error.toString(error));
+//     }
+//   };
 
-  SignIn = (email, password) => {
-    try {
-      firebase.auth().signInWithEmailAndPassword(email, password);
-      firebase.auth().onAuthStateChanged(user => {
-         alert(user.email);
-      })
-} catch (error) {
-      console.log(error.toString(error));
-    }
-  };
+//   SignIn = (email, password) => {
+//     try {
+//       firebase.auth().signInWithEmailAndPassword(email, password);
+//       firebase.auth().onAuthStateChanged(user => {
+//          alert(user.email);
+//       })
+// } catch (error) {
+//       console.log(error.toString(error));
+//     }
+//   };
 
-  render() {
-    return (
-      // <View style={styles.container}>
-      //   <Text style={styles.welcome}>Welcome to React Native!</Text>
-      //   <Text style={styles.instructions}>To get started, edit App.js</Text>
-      //   <Text style={styles.instructions}>{instructions}</Text>
-      // </View>
+//   render() {
+//     return (
+//       // <View style={styles.container}>
+//       //   <Text style={styles.welcome}>Welcome to React Native!</Text>
+//       //   <Text style={styles.instructions}>To get started, edit App.js</Text>
+//       //   <Text style={styles.instructions}>{instructions}</Text>
+//       // </View>
       
-      <Container style={styles.container}>
-        <Form>
-          <Item floatingLabel>
-            <Label>Email</Label>
-            <Input autoCapitalize="none" 
-            autoCorrect={false}
-            onChangeText={email => this.setState({ email })}
-             />
-          </Item>
-          <Item floatingLabel>
-            <Label>Sifre</Label>
-            <Input
-              secureTextEntry={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={password => this.setState({ password })}
-            />
-          </Item>
-          <Button full rounded style={{ marginTop: 20 }}
-          onPress={() => this.SignIn(this.state.email, this.state.password)} >
-            <Text>Giris Yap</Text>
-          </Button>
-          <Button full rounded success style={{ marginTop: 20 }}
-          onPress={() => this.SignUp(this.state.email, this.state.password)} > 
-            <Text>Kayit Ol</Text>
-          </Button>
-        </Form>
-      </Container>
+//       <Container style={styles.container}>
+//         <Form>
+//           <Item floatingLabel>
+//             <Label>Email</Label>
+//             <Input autoCapitalize="none" 
+//             autoCorrect={false}
+//             onChangeText={email => this.setState({ email })}
+//              />
+//           </Item>
+//           <Item floatingLabel>
+//             <Label>Sifre</Label>
+//             <Input
+//               secureTextEntry={true}
+//               autoCapitalize="none"
+//               autoCorrect={false}
+//               onChangeText={password => this.setState({ password })}
+//             />
+//           </Item>
+//           <Button full rounded style={{ marginTop: 20 }}
+//           onPress={() => this.SignIn(this.state.email, this.state.password)} >
+//             <Text>Giris Yap</Text>
+//           </Button>
+//           <Button full rounded success style={{ marginTop: 20 }}
+//           onPress={() => this.SignUp(this.state.email, this.state.password)} > 
+//             <Text>Kayit Ol</Text>
+//           </Button>
+//         </Form>
+//       </Container>
 
 
 
-    );
-  }
-}
+//     );
+//   }
+// }
 
 // const styles = StyleSheet.create({
 //   container: {
@@ -127,3 +127,72 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+class HomeScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Home Screen</Text>
+        
+        <Button full rounded style={{ marginTop: 20 }}
+          onPress={() => {
+            this.props.navigation.dispatch(StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Details' })
+              ],
+            }))
+          }}
+          >
+            <Text>Details</Text>
+          </Button>
+
+      </View>
+    );
+  }  
+}
+
+class DetailsScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Details Screen</Text>
+
+        <Button full rounded style={{ marginTop: 20 }}
+          onPress={() => {
+            this.props.navigation.dispatch(StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Home' })
+              ],
+            }))
+          }}
+          >
+            <Text>Home</Text>
+          </Button>
+
+
+      </View>
+    );
+  }  
+}
+
+const AppNavigator = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Details: DetailsScreen
+  },
+  {
+    initialRouteName: "Details"
+  }
+);
+
+export default createAppContainer(AppNavigator);
+
+// const AppContainer = createAppContainer(AppNavigator);
+
+// export default class App extends React.Component {
+//   render() {
+//     return <AppContainer />;
+//   }
+// }
